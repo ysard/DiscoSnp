@@ -1,0 +1,19 @@
+Source: disco-snp
+Section: science
+Priority: optional
+Maintainer: Pierre Vignet <pierre.vignet.contact@caramail.fr>
+Build-Depends: debhelper (>= 9), cmake
+Standards-Version: 3.9.5
+Homepage: https://github.com/GATB/DiscoSnp
+#Vcs-Git: git://anonscm.debian.org/collab-maint/disco-snp.git
+#Vcs-Browser: http://anonscm.debian.org/?p=collab-maint/disco-snp.git;a=summary
+
+Package: disco-snp
+Architecture: any
+#Need libgatbtools for dbgh5
+Depends: gatbcore-tools, ${python3:Depends}, ${shlibs:Depends}, ${misc:Depends}
+Description: Tool for the discovery of all kinds of SNPs (not only isolated ones)
+ DiscoSnp is designed for discovering all kinds of SNPs 
+ (not only isolated ones), as well as insertions and deletions, from raw set(s)
+ of reads. The number of input read sets is not constrained, it can be one, 
+ two, or more. No reference genome is needed.

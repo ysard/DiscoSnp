@@ -1,0 +1,201 @@
+--- a/scripts/ClassVCF_creator.py
++++ b/scripts/ClassVCF_creator.py
+@@ -1,10 +1,13 @@
+-#!/bin/python
++#!/usr/bin/env python3
+ # -*- coding: utf-8 -*-
++
+ ###############################################
+ #Dresscode : class : uppercase
+ #            function : begins with a capital
+ #            variable : words separated by capital
+ #            object : words separated by underscore
++from __future__ import unicode_literals
++from __future__ import print_function
+ from functionObjectVCF_creator import *
+ import re
+ import os
+--- a/scripts/VCF_creator.py
++++ b/scripts/VCF_creator.py
+@@ -1,4 +1,4 @@
+-#!/bin/python
++#!/usr/bin/env python3
+ # -*- coding: utf-8 -*-
+ #*****************************************************************************
+ #   VCF_Creator: mapping and VCF creation feature in DiscoSnp++
+@@ -18,6 +18,8 @@
+ #  You should have received a copy of the GNU Affero General Public License
+ #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ #*****************************************************************************
++from __future__ import unicode_literals
++from __future__ import print_function
+ import os
+ import sys
+ import subprocess
+--- a/scripts/discoSnp++_to_csv.py
++++ b/scripts/discoSnp++_to_csv.py
+@@ -1,4 +1,8 @@
+-#!/usr/bin/env python
++#!/usr/bin/env python3
++# -*- coding: utf-8 -*-
++
++from __future__ import unicode_literals
++from __future__ import print_function
+ import sys
+ if len(sys.argv) !=2:
+     sys.stdout.write("Mandatory: python discoSnp_to_csv.py prefix_coherent_k_kval_c_cval.fa\n")
+--- a/scripts/filterOnBestDP_multiple_variant_at_same_pos.py
++++ b/scripts/filterOnBestDP_multiple_variant_at_same_pos.py
+@@ -1,7 +1,10 @@
+-#!/usr/bin/env python
++#!/usr/bin/env python3
+ # -*- coding: utf-8 -*-
++
+ #To apply on sorted vcf by position
+ #Usage : python filterOnBestDP_multiple_variant_at_same_pos.py <vcf_for_igv> > output.vcf
++from __future__ import unicode_literals
++from __future__ import print_function
+ import sys
+ import gzip
+ import re
+--- a/scripts/filter_out_using_MAF.py
++++ b/scripts/filter_out_using_MAF.py
+@@ -1,9 +1,14 @@
++#!/usr/bin/env python3
++# -*- coding: utf-8 -*-
++
++from __future__ import unicode_literals
++from __future__ import print_function
+ import sys
+ import gzip
+ 
+ if len(sys.argv)<3:
+-    print "This tool filters out discoSnp prediction having a minor allele frequency lower than a provided threshold for ALL datasets."
+-    print "python filter_out_using_MAF.py \".fa from discoSnp\" \"MAF threshold\""
++    print("This tool filters out discoSnp prediction having a minor allele frequency lower than a provided threshold for ALL datasets.")
++    print("python filter_out_using_MAF.py \".fa from discoSnp\" \"MAF threshold\"")
+     sys.exit()
+ 
+ 
+--- a/scripts/filter_out_using_ratio_of_covered_files.py
++++ b/scripts/filter_out_using_ratio_of_covered_files.py
+@@ -1,3 +1,8 @@
++#!/usr/bin/env python3
++# -*- coding: utf-8 -*-
++
++from __future__ import unicode_literals
++from __future__ import print_function
+ import sys
+ import gzip
+ 
+--- a/scripts/functionObjectVCF_creator.py
++++ b/scripts/functionObjectVCF_creator.py
+@@ -1,6 +1,9 @@
+-#!/bin/python
++#!/usr/bin/env python3
+ # -*- coding: utf-8 -*-
++
+ ###############################################
++from __future__ import unicode_literals
++from __future__ import print_function
+ import os
+ import sys
+ import subprocess
+--- a/scripts/one2zeroBased_vcf.py
++++ b/scripts/one2zeroBased_vcf.py
+@@ -1,8 +1,11 @@
+-#!/bin/python
++#!/usr/bin/env python3
+ # -*- coding: utf-8 -*-
++
+ ###################################
+ #Transforms a 1-based vcf into 0-based vcf
+ # usage : one2zeroBased_vcf.py vcf_file
++from __future__ import unicode_literals
++from __future__ import print_function
+ import sys
+ from functionsVCF_creator import *
+ file=open(sys.argv[1],"r")
+--- a/scripts/remove_extensions_disco_file.py
++++ b/scripts/remove_extensions_disco_file.py
+@@ -1,8 +1,11 @@
+-#!/bin/python
++#!/usr/bin/env python3
+ # -*- coding: utf-8 -*-
++
+ ###################################
+ #Removes extensions in lowercase :
+ # usage : remove_extensions_disco_file.py <disco_snps_file>.fa
++from __future__ import unicode_literals
++from __future__ import print_function
+ import os
+ import sys
+ import getopt
+--- a/scripts/remove_non_covered_genotypes.py
++++ b/scripts/remove_non_covered_genotypes.py
+@@ -1,9 +1,14 @@
++#!/usr/bin/env python3
++# -*- coding: utf-8 -*-
++
++from __future__ import unicode_literals
++from __future__ import print_function
+ import sys
+ import gzip
+ 
+ if len(sys.argv)<3:
+     print ("This tool replaces discoSnp VCF genotypes with DP lower or equal to a threshold to \"./.\"")
+-    print ("python remove_non_covered_genotypes.py \".vcf from discoSnp\" \"DP threshold\"")
++    print ("python3 remove_non_covered_genotypes.py \".vcf from discoSnp\" \"DP threshold\"")
+     sys.exit()
+ 
+ 
+--- a/scripts/run_VCF_creator.sh
++++ b/scripts/run_VCF_creator.sh
+@@ -202,10 +202,10 @@
+                      exit 1
+               else
+ 
+-                     python $PATH_VCF_creator/VCF_creator.py -s $discoSNPs -o $vcffile #-n $n
++                     python3 $PATH_VCF_creator/VCF_creator.py -s $discoSNPs -o $vcffile #-n $n
+                      if [ $? -ne 0 ]
+                      then
+-                            echo "there was a problem with the VCF creation (command was \"python $PATH_VCF_creator/VCF_creator.py -s $discoSNPs -o $vcffile\""
++                            echo "there was a problem with the VCF creation (command was \"python3 $PATH_VCF_creator/VCF_creator.py -s $discoSNPs -o $vcffile\""
+                             exit 1
+                      fi
+                      echo -e "... Creation of the vcf file : done ...==> $vcffile"
+@@ -247,7 +247,7 @@
+                      exit 1
+               else
+                      discoSNPsbis=$(basename $discoSNPs .fa)"bis.fasta"
+-                     python $PATH_VCF_creator/remove_extensions_disco_file.py $discoSNPs $discoSNPsbis
++                     python3 $PATH_VCF_creator/remove_extensions_disco_file.py $discoSNPs $discoSNPsbis
+                      if [ -z "$discoSNPsbis" ];then
+                             echo "...Error with the script remove_extensions_disco_file.py..."
+                             exit 1
+@@ -305,10 +305,10 @@
+        fi
+ fi
+ 
+-python $PATH_VCF_creator/VCF_creator.py -s $samfile -o $vcffile 
++python3 $PATH_VCF_creator/VCF_creator.py -s $samfile -o $vcffile
+ if [ $? -ne 0 ]
+ then
+-       echo "there was a problem with the VCF creation (command was \"python $PATH_VCF_creator/VCF_creator.py -s $samfile -o $vcffile \""
++       echo "there was a problem with the VCF creation (command was \"python3 $PATH_VCF_creator/VCF_creator.py -s $samfile -o $vcffile \""
+        exit 1
+ fi
+ echo -e "... Creation of the vcf file: done ...==> $vcffile "
+@@ -317,10 +317,10 @@
+ if [ $igv -eq 1 ] ; then
+        $DIR/create_IGV_compatible_VCF.sh $vcffile
+        nameVCFIGV=$( basename $vcffile .vcf )
+-       python $PATH_VCF_creator/filterOnBestDP_multiple_variant_at_same_pos.py $nameVCFIGV\_for_IGV.vcf > tmp.vcf
++       python3 $PATH_VCF_creator/filterOnBestDP_multiple_variant_at_same_pos.py $nameVCFIGV\_for_IGV.vcf > tmp.vcf
+        if [ $? -ne 0 ]
+        then
+-              echo "there was a problem with the IGV VCF creation (command was \"python $PATH_VCF_creator/filterOnBestDP_multiple_variant_at_same_pos.py $nameVCFIGV\_for_IGV.vcf > tmp.vcf\""
++              echo "there was a problem with the IGV VCF creation (command was \"python3 $PATH_VCF_creator/filterOnBestDP_multiple_variant_at_same_pos.py $nameVCFIGV\_for_IGV.vcf > tmp.vcf\""
+               exit 1
+        fi
+        echo -e "... Creation of the vcf file: done ...==> $vcffile"

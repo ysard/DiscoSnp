@@ -1,0 +1,2 @@
+?package(disco-snp):needs="text" section="Applications/Science/Biology"\
+  title="disco-snp" command="/usr/bin/disco-snp"

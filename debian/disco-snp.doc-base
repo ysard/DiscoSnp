@@ -1,0 +1,12 @@
+Document: disco-snp
+Title: Debian disco-snp Manual
+Author: Genscale Team
+Abstract: This manual describes what disco-snp tools are
+ and how they can be used.
+Section: Science/Biology
+
+Format: postscript
+Files: /usr/share/doc/disco-snp/*.pdf.gz
+
+Format: text
+Files: /usr/share/doc/disco-snp/*.txt.gz

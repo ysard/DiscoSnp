@@ -1,0 +1,27 @@
+--- a/run_discoSnp++.sh
++++ b/run_discoSnp++.sh
+@@ -59,10 +59,11 @@
+        kissnp2_bin=$EDIR/build/bin/kissnp2
+        kissreads2_bin=$EDIR/build/bin/kissreads2
+ else # VERSION BINARY
+-       read_file_names_bin=$EDIR/bin/read_file_names
+-       dbgh5_bin=$EDIR/bin/dbgh5
+-       kissnp2_bin=$EDIR/bin/kissnp2
+-       kissreads2_bin=$EDIR/bin/kissreads2
++       EDIR="/usr/share/disco-snp"
++       read_file_names_bin=read_file_names
++       dbgh5_bin=dbgh5
++       kissnp2_bin=kissnp2
++       kissreads2_bin=kissreads2
+ fi
+ 
+ 
+@@ -349,7 +350,7 @@
+        echo -e "\t#################### GRAPH CREATION  #######################"
+        echo -e "\t############################################################"
+ 
+-       graphCmd="${dbgh5_bin} -in ${read_sets}_${kissprefix}_removemeplease -out $h5prefix -kmer-size $k -abundance-min ${c_dbgh5} -abundance-max $C -solidity-kind one ${option_cores_gatb} -mphf none -verbose $verbose"
++       graphCmd="${dbgh5_bin} -in ${read_sets}_${kissprefix}_removemeplease -out $h5prefix -kmer-size $k -abundance-min ${c_dbgh5} -abundance-max $C -solidity-kind sum ${option_cores_gatb} -verbose $verbose"
+        echo ${graphCmd}
+        ${graphCmd}
+ 

@@ -1,0 +1,5 @@
+link_to_libgatbcore.patch
+remove_unwanted_files_from_release.patch
+fix_compatibility_gatbcore_1.3.0.patch
+fix_new_paths_in_shell_file.patch
+fix_wrong_path_for_python_interpreter.patch

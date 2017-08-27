@@ -1,0 +1,249 @@
+.\"                                      Hey, EMACS: \-*\- nroff \-*\-
+.\" (C) Copyright 2017 Pierre Vignet <pierre.vignet.contact@caramail.fr>,
+.\"
+.\" First parameter, NAME, should be all caps
+.\" Second parameter, SECTION, should be 1\-8, maybe w/ subsection
+.\" other parameters are allowed: see man(7), man(1)
+.TH DISCO\-SNP 1 "July 22, 2017"
+.\" Please adjust this date whenever revising the manpage.
+.\"
+.\" Some roff macros, for reference:
+.\" .nh        disable hyphenation
+.\" .hy        enable hyphenation
+.\" .ad l      left justify
+.\" .ad b      justify to both left and right margins
+.\" .nf        disable filling
+.\" .fi        enable filling
+.\" .br        insert line break
+.\" .sp <n>    insert n+1 empty lines
+.\" for manpage\-specific macros, see man(7)
+.SH NAME
+disco\-snp \- a program designed for discovering all kinds of SNPs (not only isolated ones),
+as well as insertions and deletions, from raw set(s) of reads.
+
+.SH DESCRIPTION
+Software 
+.BI "disco\-snp"
+is designed for extracting Single Nucleotide Polymorphism (SNP) and
+small indels from raw set(s) of reads obtained with Next Generation Sequencers (NGS).
+Note that this tool is specially designed to use only a limited amount of memory (3 billions
+reads of size 100 can be treated with less that 6GB memory).
+The software is composed of three independent modules. The first module, 
+.BI "kissnp2"
+, detects SNPs and indels from read sets. The second module, 
+.BI "kissreads2"
+, enhances the kissnp2 results
+by computing per read set and for each predicted polymorphism i/ its mean read coverage
+and ii/ the average (phred) quality of reads generating the polymorphism. The third module,
+.BI "VCF_creator"
+generates a VCF file from the kissnp2/kissreads2 outputs. VCF_creator may use
+a reference file or not.
+
+
+.SH OPTIONS
+
+The main script
+.BI "disco\-snp" 
+automatically runs the three modules (1/ SNP detection; 2/
+read coverage and quality computations; 3/ VCF creation). You will provide the following
+information:
+
+.BI "Options related to variant calling"
+.PP
+.RS
+.TP
+.BI "\-r (read_sets) file_of_files.txt"
+File indicating the localization of the read files. Note that
+these files may be in fastq, or fasta, gzipped or not.
+This is the only mandatory parameter.
+See the dedicated section describing the file of file format.
+.TP
+.BI "\-g"
+reuse a previously created graph (.h5 file) with same prefix and same k, c and C
+parameters. Using this option enables to reuse a graph created during a previous
+experiment with same prefix name same k, c and C values. Else, by default, if such a
+graph exists, it is overwritten. WARNING: use this option only if you are sure the read
+set(s) used are the same than those previously used for creating the graph.
+.TP
+.BI "\-b branching_strategy"
+branching filtering approach. This parameters influences the
+precision recall.
+.PP
+.RS
+▪ 0: variants for which any of the two paths is branching are discarded (high precision,
+lowers the recall in complex genomes). Default value
+.PP
+▪ 1: (smart branching) forbid SNPs for wich the two paths are branching (e.g. the two
+paths can be created either with a 'A' or a 'C' at the same position
+.PP
+▪ 2: No limitation on branching (lowers the precision, high recall)"
+.RE
+.PP
+
+.TP
+.BI "\-s value"
+In b2 mode only: maximal number of symmetrical croasroads traversed while
+trying to close a bubble. Default: no limit
+.TP
+.BI "\-D value"
+If specified, discoSnp++ will search for deletions of size from 1 to D included.
+Default=0
+.TP
+.BI "\-P value"
+discoSnp++ will search up to P SNPs in a unique bubble. Default=1.
+.TP
+.BI "\-p prefix_name"
+All out files will start with this prefix. Default="discoRes"
+.TP
+.BI "\-l"
+remove low complexity bubbles
+.TP
+.BI "\-k kmer_size"
+size of kmers (default: 31)
+.TP
+.BI "\-t"
+extends each polymorphism with left and right unitigs
+.TP
+.BI "\-T"
+extends each polymorphism with left and right contigs
+.TP
+.BI "\-c value"
+Minimal coverage per read set: Used by kissnp2 (don't use kmers with lower
+coverage) and kissreads (read coherency threshold). A kmer is conserved only if its
+coverage is “solid” in a read set. For being “solid” for a read set, a kmer coverage must
+be higher or equal to the threshold of this read set. Default=auto.
+The minimal coverage may be either :
+.PP
+.RS
+▪ Equal to a fixed value, equal for all read sets.
+.TP
+Example: \-c 4
+.PP
+▪ Distinct for each read set
+.TP
+Example with three read sets: \-c 4,5,17
+.PP
+▪ Automatically detected
+.TP
+Example \-c auto
+.PP
+▪ Automatically detected for one or some of the read sets:
+.TP
+Example with three read sets: \-c 4,auto,7
+.RE
+.PP
+
+Note the if the number of provided values is lower than the number of read sets, the last
+value applies for all remaining read sets:
+.PP
+.RS
+Example with three read sets:
+.TP
+\-c 4,7 applies \-c 4,7,7
+.PP
+.TP
+\-c 4,auto applies \-c 4,auto,auto
+.PP
+.RE
+.PP
+
+.TP
+.BI "\-C value"
+Maximal coverage per read set: Used by kissnp2 (don't use kmers with higher
+coverage). Default=2^31\-1
+.TP
+.BI "\-d error_threshold"
+max number of errors per read (used by kissreads2 only).
+Default 1
+.TP
+.BI "\-n"
+do not compute the genotypes
+.TP
+.BI "\-u"
+max number of used threads
+.RE
+.PP
+
+.BI "Options related to VCF_Creator AND to the possible usage of a reference genome"
+.PP
+.RS
+.TP
+.BI "\-G reference_file"
+reference genome file (fasta, fastq, gzipped or nor). In absence of this
+file the VCF created by VCF_creator won't contain mapping related results
+.TP
+.BI "\-R"
+use the reference file also in the variant calling, not only for mapping results. In this
+case, all the kmers of the reference file are used for calling variants. Note that the
+kissreads2 results won't show read coverage for the reference.
+.TP
+.BI "\-B"
+bwa path . e.g. /home/me/my_programs/bwa\-0.7.12/ (note that bwa must be pre\-
+compiled)
+.PP
+.RS
+▪ Optional unless option \-G used and bwa is not in the binary path
+.RE
+.PP
+
+.TP
+.BI "\-M"
+Maximal number of mapping errors during BWA mapping phase. Default 4
+.PP
+.RS
+▪ Useless unless mapping on reference genome is required (option \-G).
+Additionally you may change some kissnp2 / kissreads2 / VCF_creator options. In this case you
+may change the two corresponding lines in the 
+.BI "disco\-snp"
+file. To know the possible
+options, run 
+.BI "kissnp2"
+and/or 
+.BI "kissreads2"
+and/or
+.BI "/usr/share/run_VCF_creator.sh"
+without options. Note that usually, changing these options is not necessary.
+.RE
+.PP
+.RE
+.PP
+
+.SH EXAMPLES
+Run DiscoSnp WITHOUT mapping results on a reference genome:
+.PP
+.RS
+disco\-snp \-r test/fof.txt \-T
+.RE
+.PP
+
+Run DiscoSnp WITH mapping results on a reference genome (requires bwa):
+.PP
+.RS
+disco\-snp \-r test/fof.txt \-T  \-G test/reference_genome.fa
+.RE
+.PP
+
+Note: if bwa is not in you PATH, then add the option "\-B path_to_bwa". For instance:
+.PP
+.RS
+disco\-snp \-r test/fof.txt \-T  \-G test/reference_genome.fa \-B /home/me/my_programs/bwa\-0.7.12/
+.RE
+.PP
+
+Run DiscoSnp WITH mapping results on a reference genome AND using this reference genome for calling variants:
+.PP
+.RS
+disco\-snp \-r test/fof.txt \-T  \-G test/reference_genome.fa \-R
+.RE
+.PP
+
+.SH "SEE ALSO"
+.BR disco\-snp (1)
+.br
+The programs are documented fully by the Genscale Team
+available at https://gatb.inria.fr/software/discosnp/
+and in /usr/share/doc/disco\-snp/.
+
+.SH AUTHORS
+This manual page was written by Pierre Vignet <pierre.vignet.contact@caramail.fr>
+for the Debian project (and may be used by others).

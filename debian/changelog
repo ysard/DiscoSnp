@@ -1,0 +1,25 @@
+disco-snp (2.2.10-2) UNRELEASED; urgency=medium
+
+  * Ability to find a compile against libgatbcore previously installed on
+  the system.
+  
+  * Change executable name from run_discoSnp++.sh to disco-snp (conventions).
+  
+  * Remove unwanted files from install directive and migrate scripts/ to
+  share/disco-snp/scripts/.
+  
+  * Migration to gatbcore 1.3.0 by replacing Graph::Vector with GraphVector;
+  
+  * Modify run_discoSnp++.sh with new system paths 
+  (/usr/bin and /usr/share/disco-snp)of used tools.
+  
+  * Migrate scripts from python2 to python3, and try to make them compatible
+  with python2.
+
+ -- Pierre Vignet <pierre.vignet.contact@caramail.fr>  Sat, 22 Jul 2017 13:30:06 +0200
+
+disco-snp (2.2.10-1) unstable; urgency=low
+
+  * Initial release (Closes: #nnnn)  <nnnn is the bug number of your ITP>
+
+ -- Pierre Vignet <pierre.vignet.contact@caramail.fr>  Sat, 22 Jul 2017 03:13:41 +0200
